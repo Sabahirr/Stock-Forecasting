@@ -15,7 +15,7 @@ import os
 
 icon = Image.open('icon.png')
 logo = Image.open('home1.png')
-homep = Image.open('home.png')
+homep = Image.open('home1.png')
 banner1 = Image.open('ban.jpeg')
 banner2 = Image.open('bann.jpg')
 
@@ -109,7 +109,7 @@ if menu == 'Homepage':
         </ul>
     """, unsafe_allow_html=True)
 
-    st.image(homep, use_column_width='always')
+    # st.image(homep, use_column_width='always')
     
 
 
