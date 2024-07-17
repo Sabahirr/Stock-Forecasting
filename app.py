@@ -162,10 +162,6 @@ elif menu == 'Forecast':
         # progress_text.text("Scaling data...")
 
 
-
-
-
-
         data = get_stock_data(ticker, interval)
         data = data.resample(resample_interval).ffill()
 
@@ -212,7 +208,7 @@ elif menu == 'Forecast':
         history = model.fit(
             X, y,
             batch_size=32,
-            epochs=2,  # Adjust the number of epochs as needed
+            epochs=100,  # Adjust the number of epochs as needed
             validation_split=0.2,
             callbacks=[early_stopping, StreamlitProgressCallback()],
             verbose=0  # Set verbose to 0 to prevent TensorFlow from printing to console
