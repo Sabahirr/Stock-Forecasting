@@ -15,10 +15,8 @@ import os
 
 icon = Image.open('icon.png')
 logo = Image.open('home1.png')
-homep = Image.open('home1.png')
 banner1 = Image.open('ban.jpeg')
 banner2 = Image.open('bann.jpg')
-
 
 st.set_page_config(layout='wide', page_title="Sabahir's app", page_icon=icon)
 st.markdown("<h1 style='color: #1f77b4;'>Welcome to the Stock Price Forecasting App!</h1>", unsafe_allow_html=True)
@@ -74,13 +72,7 @@ def forecast_stock(model, data, scaler, time_step, n_periods):
     forecasted_stock_prices = scaler.inverse_transform(lst_output)
     return forecasted_stock_prices
 
-
-
-
-
 if menu == 'Homepage':
-    
-    
     st.subheader("Overview")
     st.markdown("""
         <p style='color: #ff7f0e;'>
@@ -109,26 +101,17 @@ if menu == 'Homepage':
         </ul>
     """, unsafe_allow_html=True)
 
-    # st.image(homep, use_column_width='always')
-    
-
-
 elif menu == 'Forecast':
-   
-
     st.image(banner1, use_column_width='always')
     entered = st.text_input('Enter the stock ticker or select the most popular one:')
-    st.warning(""" You can enter the name of any stock or cryptocurrency listed in yahoo finance as is. https://finance.yahoo.com/
-                  
-                """)
+    st.warning(""" You can enter the name of any stock or cryptocurrency listed in yahoo finance as is. https://finance.yahoo.com/ """)
    
     most_popular = st.selectbox('Most popular:', ['BTC-USD', 'GC=F' , 'SI=F' , 'CL=F' , '^GSPC' , '^IXIC' , 'NVDA' , 'AAPL' , 'GOOGL' , 'TSLA', 'ETH-USD',
                                                         'BNB-USD','SOL-USD', 'XRP-USD'])
     st.info("""
                 **Bitcoin** : 'BTC-USD',   **Gold** : 'GC=F' ,    **Silver** : 'SI=F' ,    **Crude Oil** : 'CL=F' ,    **S&P 500** : '^GSPC' ,   **Nasdaq** : '^IXIC', **NVIDIA**: 'NVDA' , 
-          **Apple**: 'AAPL' , **Google**: 'GOOGL' , **Tesla** : 'TSLA' ,  **Ethereum** : 'ETH-USD' 
-
-                """)
+          **Apple**: 'AAPL' , **Google**: 'GOOGL' , **Tesla** : 'TSLA' ,  **Ethereum** : 'ETH-USD' """)
+    
     ticker = entered or most_popular
     forecast_type = st.selectbox('Select forecast type:', ['Day', 'Week', 'Month'])
 
@@ -148,20 +131,6 @@ elif menu == 'Forecast':
         st.error("Invalid forecast type. Please select 'Day', 'Week', or 'Month'.")
 
     if st.button('Forecast'):
-
-
-        # progress_bar = st.progress(0)
-        # progress_text = st.empty()
-
-        # progress_bar.progress(10)
-        # progress_text.text("Fetching stock data...")
-        # data = get_stock_data(ticker, interval)
-        # data = data.resample(resample_interval).ffill()
-
-        # progress_bar.progress(30)
-        # progress_text.text("Scaling data...")
-
-
         data = get_stock_data(ticker, interval)
         data = data.resample(resample_interval).ffill()
 
@@ -171,10 +140,6 @@ elif menu == 'Forecast':
         time_step = 100
         X, y = create_dataset(scaled_data, time_step)
         X = X.reshape(X.shape[0], X.shape[1], 1)
-
-        # train_size = int(len(X) * 0.8)
-        # X_train, X_test = X[0:train_size], X[train_size:len(X)]
-        # y_train, y_test = y[0:train_size], y[train_size:len(y)]
 
         model = Sequential([
             LSTM(50, return_sequences=True, input_shape=(time_step, 1)),
@@ -190,8 +155,7 @@ elif menu == 'Forecast':
             monitor='val_loss',
             patience=10,
             mode='min',
-            restore_best_weights=True
-        )
+            restore_best_weights=True )
         
 
          # Create a progress bar
@@ -213,21 +177,6 @@ elif menu == 'Forecast':
             callbacks=[early_stopping, StreamlitProgressCallback()],
             verbose=0  # Set verbose to 0 to prevent TensorFlow from printing to console
         )
-
-
-        # history = model.fit(
-        #     X_train, y_train,
-        #     batch_size=32,
-        #     epochs=2,
-        #     validation_split=0.2,
-        #     callbacks=[early_stopping],
-        #     verbose=1
-        # )
-
-        # progress_bar.progress(80)
-        # progress_text.text("Forecasting stock prices...")
-        
-
 
         forecasted_prices = forecast_stock(model, scaled_data, scaler, time_step, n_periods)
 
@@ -255,9 +204,7 @@ elif menu == 'Evaluate':
 
     st.image(banner2, use_column_width='always')
     entered = st.text_input('Enter the stock ticker or select the most popular one:')
-    st.warning(""" You can enter the name of any stock or cryptocurrency listed in yahoo finance as is. https://finance.yahoo.com/
-                  
-                """)
+    st.warning(""" You can enter the name of any stock or cryptocurrency listed in yahoo finance as is. https://finance.yahoo.com/ """)
     most_popular = st.selectbox('Most popular:', ['BTC-USD', 'GC=F' , 'SI=F' , 'CL=F' , '^GSPC' , '^IXIC' , 'NVDA' , 'TSLA', 'ETH-USD',
                                                         'BNB-USD','SOL-USD', 'XRP-USD'])
     st.info("""
@@ -303,8 +250,7 @@ elif menu == 'Evaluate':
             LSTM(50, return_sequences=True, input_shape=(time_step, 1)),
             LSTM(50, return_sequences=False),
             Dense(25),
-            Dense(1)
-        ])
+            Dense(1) ])
 
         model.compile(optimizer='adam', loss='mean_squared_error')
 
@@ -312,8 +258,7 @@ elif menu == 'Evaluate':
             monitor='val_loss',
             patience=10,
             mode='min',
-            restore_best_weights=True
-        )
+            restore_best_weights=True )
 
 
          # Create a progress bar
@@ -333,10 +278,7 @@ elif menu == 'Evaluate':
             epochs=100,  # Adjust the number of epochs as needed
             validation_split=0.2,
             callbacks=[early_stopping, StreamlitProgressCallback()],
-            verbose=0  # Set verbose to 0 to prevent TensorFlow from printing to console
-        )
-
-
+            verbose=0  # Set verbose to 0 to prevent TensorFlow from printing to console )
 
         # Make predictions
         train_predict = model.predict(X_train)
